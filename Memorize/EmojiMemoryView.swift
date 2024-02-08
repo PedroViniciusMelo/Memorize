@@ -7,27 +7,19 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct EmojiMemoryView: View {
     let emojis = ["👻", "🕷️", "🎃", "😈", "👹"]
-    @State var emojisCount = 4
     
     var body: some View {
-        VStack {
-            ScrollView {
-                cards
-            }
-            
-            Spacer()
-            
-            cardCountAdjusters
+        ScrollView {
+            cards
         }.padding()
-        
     }
     
     
     var cards : some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 120))]) {
-            ForEach(0..<emojisCount, id: \.self) { index in
+            ForEach(emojis.indices, id: \.self) { index in
                 CardView(emoji : emojis[index])
                     .aspectRatio(2/3, contentMode: /*@START_MENU_TOKEN@*/.fill/*@END_MENU_TOKEN@*/)
             }
@@ -35,35 +27,7 @@ struct ContentView: View {
         .foregroundColor(.orange)
     }
     
-    func cardCountAdjuster(by offset: Int, symbol: String) -> some View {
-        Button (
-            action: {
-                emojisCount += offset
-            }, label: {
-                Image(systemName: symbol)
-            }
-        ).disabled(emojisCount + offset < 1 || emojisCount + offset > emojis.count )
-    }
-    
-    var cardRemover : some View {
-        cardCountAdjuster(by: -1, symbol: "rectangle.stack.fill.badge.minus")
-    }
-    
-    var cardAdder : some View {
-        cardCountAdjuster(by: +1, symbol: "rectangle.stack.fill.badge.plus")
-    }
-    
-    var cardCountAdjusters : some View {
-        HStack {
-            cardRemover
-            
-            Spacer()
-            
-            cardAdder
-        }
-        .imageScale(.large)
-        .font(.largeTitle)
-    }
+
 }
 
 struct CardView : View {
@@ -87,5 +51,5 @@ struct CardView : View {
 }
 
 #Preview {
-    ContentView()
+    EmojiMemoryView()
 }
